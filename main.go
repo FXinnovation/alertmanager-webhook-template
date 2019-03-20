@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"github.com/prometheus/alertmanager/template"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -35,18 +36,12 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 	sendJsonResponse(w, http.StatusOK, "Success")
 }
 
-// Function used to give a status on the webhook receiver
-func health(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, http.StatusOK, "Success")
-}
-
-
 // Starts 2 listeners
 // - first one to give a status on the receiver itself
 // - second one to actually process the data
 func main() {
-	http.HandleFunc("/health", health)
 	http.HandleFunc("/webhook", webhook)
+	http.Handle("/metrics", promhttp.Handler())
 
 	listenAddress := ":9876"
 	if os.Getenv("PORT") != "" {

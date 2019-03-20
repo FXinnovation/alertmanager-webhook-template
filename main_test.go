@@ -8,32 +8,6 @@ import (
 	"testing"
 )
 
-func TestHealthHandler(t *testing.T) {
-	// Create a request to pass to the handler
-	req, err := http.NewRequest("GET", "/health", nil)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	// Create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response
-	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(health)
-
-	// Test the handler with the request and record the result
-	handler.ServeHTTP(rr, req)
-
-	// Check the status code
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("Wrong status code: got %v, want %v", status, http.StatusOK)
-	}
-
-	// Check the response body
-	expected := `{"Status":200,"Message":"Success"}`
-	if rr.Body.String() != expected {
-		t.Errorf("Unexpected body: got %v, want %v", rr.Body.String(), expected)
-	}
-}
-
 func TestWebhookHandler(t *testing.T) {
 	// Load a simple example of a body coming from AlertManager
 	data, err := ioutil.ReadFile("test_param.json")
