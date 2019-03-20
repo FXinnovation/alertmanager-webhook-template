@@ -9,7 +9,8 @@ import (
 	"os"
 )
 
-type JsonResponse struct {
+// Webhook http response
+type JSONResponse struct {
 	Status  int
 	Message string
 }
@@ -19,7 +20,7 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 	// Extract data from the body in the Data template provided by AlertManager
 	data := template.Data{}
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		sendJsonResponse(w, http.StatusBadRequest, err.Error())
+		sendJSONResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -33,7 +34,7 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Returns a 200 if everything went smoothly
-	sendJsonResponse(w, http.StatusOK, "Success")
+	sendJSONResponse(w, http.StatusOK, "Success")
 }
 
 // Starts 2 listeners
@@ -52,8 +53,8 @@ func main() {
 	log.Fatal(http.ListenAndServe(listenAddress, nil))
 }
 
-func sendJsonResponse(w http.ResponseWriter, status int, message string) {
-	data := JsonResponse{
+func sendJSONResponse(w http.ResponseWriter, status int, message string) {
+	data := JSONResponse{
 		Status:  status,
 		Message: message,
 	}
