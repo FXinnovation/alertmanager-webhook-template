@@ -2,40 +2,47 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/prometheus/alertmanager/template"
 	"log"
 	"net/http"
 	"os"
 )
 
-type responseJSON struct {
+type JsonResponse struct {
 	Status  int
 	Message string
 }
 
 func webhook(w http.ResponseWriter, r *http.Request) {
+	// Do not forget to close the body at the end
 	defer r.Body.Close()
 
+	// Extract data from the body in the Data template provided by AlertManager
 	data := template.Data{}
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
-		asJson(w, http.StatusBadRequest, err.Error())
+		sendJsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	log.Printf("Alerts: Status=%v, GroupLabels=%v, CommonLabels=%v", data.Status, data.GroupLabels, data.CommonLabels)
+	// Do stuff here
+	log.Printf("Alerts: Status=%s, GroupLabels=%v, CommonLabels=%v", data.Status, data.GroupLabels, data.CommonLabels)
 	for _, alert := range data.Alerts {
 		log.Printf("Alert: status=%s,Labels=%v,Annotations=%v", alert.Status, alert.Labels, alert.Annotations)
 	}
 
-	asJson(w, http.StatusOK, "success")
+	// Returns a 200 if everything went smoothly
+	sendJsonResponse(w, http.StatusOK, "Success")
 }
 
+// Function used to give a status on the webhook receiver
 func health(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Ok!")
-	asJson(w, http.StatusOK, "success")
+	sendJsonResponse(w, http.StatusOK, "Success")
 }
 
+
+// Starts 2 listeners
+// - first one to give a status on the receiver itself
+// - second one to actually process the data
 func main() {
 	http.HandleFunc("/health", health)
 	http.HandleFunc("/webhook", webhook)
@@ -49,14 +56,13 @@ func main() {
 	log.Fatal(http.ListenAndServe(listenAddress, nil))
 }
 
-func asJson(w http.ResponseWriter, status int, message string) {
-	data := responseJSON{
+func sendJsonResponse(w http.ResponseWriter, status int, message string) {
+	data := JsonResponse{
 		Status:  status,
 		Message: message,
 	}
 	bytes, _ := json.Marshal(data)
-	json := string(bytes[:])
 
 	w.WriteHeader(status)
-	fmt.Fprint(w, json)
+	w.Write(bytes)
 }
