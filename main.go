@@ -14,8 +14,6 @@ type JsonResponse struct {
 }
 
 func webhook(w http.ResponseWriter, r *http.Request) {
-	// Do not forget to close the body at the end
-	defer r.Body.Close()
 
 	// Extract data from the body in the Data template provided by AlertManager
 	data := template.Data{}
@@ -23,6 +21,9 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 		sendJsonResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
+
+	// Do not forget to close the body at the end
+	defer r.Body.Close()
 
 	// Do stuff here
 	log.Printf("Alerts: Status=%s, GroupLabels=%v, CommonLabels=%v", data.Status, data.GroupLabels, data.CommonLabels)
