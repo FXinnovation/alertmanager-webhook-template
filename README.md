@@ -1,7 +1,7 @@
 # alertmanager-webhook-template
 [![Build Status](https://travis-ci.org/FXinnovation/alertmanager-webhook-template.svg?branch=master)](https://travis-ci.org/FXinnovation/alertmanager-webhook-template)
 
-The alertmanager-webhook-template is a very basic Prometheus AlertManager webhook receiver template. 
+The alertmanager-webhook-template is a basic Prometheus AlertManager webhook receiver template. 
 The goal of this project is to provide a minimal start point from which any webhook receiver may start.
 It contains a very minimal set of features common to any webhook receiver
 
@@ -11,7 +11,7 @@ In summary, copy this project's code to get your webhook receiver started.
 
 ### Prerequisites
 
-To run this project, you will need a working Go environment.
+To run this project, you will need a [working Go environment](https://golang.org/doc/install).
 
 ### Installing
 
