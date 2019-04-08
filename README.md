@@ -31,8 +31,8 @@ The template listen on port 9876 by default, be sure to change that port in orde
 
 ## Contributing
 
-Refer to [CONTRIBUTING.md](https://github.com/FXinnovation/alertmanager-webhook-template/blob/master/CONTRIBUTING.md)
+Refer to [CONTRIBUTING.md](https://github.com/FXinnovation/alertmanager-webhook-template/blob/master/CONTRIBUTING.md).
 
 ## License
 
-To be added soon.
+Apache License 2.0, see [LICENSE](https://github.com/FXinnovation/alertmanager-webhook-template/blob/master/LICENSE).
