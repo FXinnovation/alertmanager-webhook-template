@@ -2,11 +2,13 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/prometheus/alertmanager/template"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/prometheus/alertmanager/template"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // Webhook http response
@@ -61,5 +63,9 @@ func sendJSONResponse(w http.ResponseWriter, status int, message string) {
 	bytes, _ := json.Marshal(data)
 
 	w.WriteHeader(status)
-	w.Write(bytes)
+	_, err := w.Write(bytes)
+
+	if err != nil {
+		log.Fatal(fmt.Errorf("Error writing JSON response: %s", err))
+	}
 }
