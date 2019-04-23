@@ -2,6 +2,21 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/alecthomas/template"
+  packages = [
+    ".",
+    "parse"
+  ]
+  revision = "a0175ee3bccc567396460bf5acd36800cb10c49c"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/alecthomas/units"
+  packages = ["."]
+  revision = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a"
+
+[[projects]]
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   revision = "4b2b341e8d7715fae06375aa633dbb6e91b3fb46"
@@ -51,7 +66,8 @@
   packages = [
     "expfmt",
     "internal/bitbucket.org/ww/goautoneg",
-    "model"
+    "model",
+    "version"
   ]
   revision = "a82f4c12f983cc2649298185f296632953e50d3e"
   version = "v0.3.0"
@@ -78,9 +94,15 @@
   packages = ["."]
   revision = "6a9ea43bcacdf716a5c1b38efff722c07adf0069"
 
+[[projects]]
+  name = "gopkg.in/alecthomas/kingpin.v2"
+  packages = ["."]
+  revision = "947dcec5ba9c011838740e680966fd7087a71d0d"
+  version = "v2.2.6"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "11b6f4679f5791c81f76f61fa23131a505fcb797c927f7f08798583d8e247589"
+  inputs-digest = "cf49f4fed4cf9cc179e6263d2eaee858d6e0ae3915ff500f0e00d30526f5fe2f"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -5,10 +5,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/prometheus/alertmanager/template"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
+
+	"gopkg.in/alecthomas/kingpin.v2"
+)
+
+var (
+	listenAddress = kingpin.Flag("web.listen-address", "The address to listen on for HTTP requests.").Default(":9876").String()
 )
 
 // Webhook http response
@@ -43,16 +49,18 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 // - first one to give a status on the receiver itself
 // - second one to actually process the data
 func main() {
+	kingpin.Version(version.Print("my_webhook"))
+	kingpin.HelpFlag.Short('h')
+	kingpin.Parse()
+
+	log.Println("Starting webhook", version.Info())
+	log.Println("Build context", version.BuildContext())
+
 	http.HandleFunc("/webhook", webhook)
 	http.Handle("/metrics", promhttp.Handler())
 
-	listenAddress := ":9876"
-	if os.Getenv("PORT") != "" {
-		listenAddress = ":" + os.Getenv("PORT")
-	}
-
-	log.Printf("listening on: %v", listenAddress)
-	log.Fatal(http.ListenAndServe(listenAddress, nil))
+	log.Printf("listening on: %v", *listenAddress)
+	log.Fatal(http.ListenAndServe(*listenAddress, nil))
 }
 
 func sendJSONResponse(w http.ResponseWriter, status int, message string) {
@@ -66,6 +74,6 @@ func sendJSONResponse(w http.ResponseWriter, status int, message string) {
 	_, err := w.Write(bytes)
 
 	if err != nil {
-		log.Fatal(fmt.Errorf("Error writing JSON response: %s", err))
+		log.Println(fmt.Errorf("Error writing JSON response: %s", err))
 	}
 }

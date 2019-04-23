@@ -22,12 +22,30 @@ go get -u github.com/FXinnovation/alertmanager-webhook-template
 ## Running the tests
 
 ```bash
-go test
+make test
+```
+
+## Usage
+
+```bash
+./alertmanager-webhook-template -h
 ```
 
 ## Deployment
 
 The template listen on port 9876 by default, be sure to change that port in order to suit your new receiver needs.
+
+## Docker image
+
+You can build a docker image using:
+```bash
+make docker
+```
+The resulting image is named `fxinnovation/alertmanager-webhook-template:{git-branch}`.
+It exposes port 9876. To configure it, run:
+```
+$ docker run -p 9876 fxinnovation/alertmanager-webhook-template:master
+```
 
 ## Contributing
 
