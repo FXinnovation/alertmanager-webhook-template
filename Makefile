@@ -9,7 +9,7 @@ DOCKER_REPO             ?= fxinnovation
 DOCKER_IMAGE_NAME       ?= alertmanager-webhook-template
 DOCKER_IMAGE_TAG        ?= $(subst /,-,$(shell git rev-parse --abbrev-ref HEAD))
 
-all: lint format build test
+all: lint vet format build test
 
 test: build ## running test after build
 	@echo ">> running tests"
@@ -52,11 +52,11 @@ promu: ## gets promu for building
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/prometheus/promu
 
-lint: setuplint ## lint code
+lint: golint ## lint code
 	@echo ">> linting code"
-	@$(GOLANGCILINT) run
+	@! golint $(pkgs) | grep '^'
 
-setuplint: ## downloads lint dependencies
-	@go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+golint: ## gets golint for building
+	@go get -u golang.org/x/lint/golint
 
 .PHONY: all style format dependencies build test vet tarball promu

@@ -17,7 +17,7 @@ var (
 	listenAddress = kingpin.Flag("web.listen-address", "The address to listen on for HTTP requests.").Default(":9876").String()
 )
 
-// Webhook http response
+// JSONResponse is the Webhook http response
 type JSONResponse struct {
 	Status  int
 	Message string
